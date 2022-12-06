@@ -1,0 +1,21 @@
+- name: Configurar servidor bd
+  hosts: bd01
+
+  user: vagrant
+  become: yes
+  vars_files:
+    - var/main.yml
+  vars:
+  - dbname: "bd01"
+  - dbusername: "root"
+  - dbpassword: ""
+  tasks:
+    - name: Configuração de hosts
+    lineinFile: line="{{item}}" path=/etc/hosts
+    with_items:
+     - 192.168.1.2 control-node
+     - 192.168.1.3 app01
+     - 192.168.1.4 bd01
+  roles:
+   - configuracao-default-so
+   - role: geerlingguy.mysql
